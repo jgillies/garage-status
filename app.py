@@ -1,21 +1,8 @@
 from flask import Flask, render_template
 import RPi.GPIO as GPIO
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 PIN = 15
-
-
-def get_garage_door_state(pin):
-    '''Returns the state of the garage door on the specified pin as a string
-
-        Args:
-            pin: GPIO pin number.
-    '''
-    if GPIO.input(PIN):  # pylint: disable=no-member
-        state = 'open'
-    else:
-        state = 'closed'
-    return state
 
 
 app = Flask(__name__)
@@ -24,7 +11,7 @@ app = Flask(__name__)
 @app.route('/garage')
 def garage():
     try:
-        GPIO.setup(15, GPIO.IN)
+        GPIO.setup(PIN, GPIO.IN)
         if GPIO.input(PIN):
             response = 'open'
         else:
